@@ -617,7 +617,8 @@ class WebKitPage(QWebPage):
     self.mainFrame().javaScriptWindowObjectCleared.connect(self.handleJavaScriptWindowObjectCleared)
     self.mainFrame().urlChanged.connect(self.handleUrlChanged)
     self.mainFrame().titleChanged.connect(self.handleTitleChanged)
-    self.mainFrame().pageChanged.connect(self.handlePageChanged)
+    if hasattr(self.mainFrame(), 'pageChanged'):
+        self.mainFrame().pageChanged.connect(self.handlePageChanged)
 
     self.setViewportSize(QSize(400, 300))
 

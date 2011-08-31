@@ -73,7 +73,7 @@ class WebKitServer(QTcpServer):
 
   @classmethod
   def daemon(cls, op='start', host=u'127.0.0.1', port=1982, pidPath=u'/tmp/webkitd.pid', stdout=u'/tmp/webkitd.out', stderr=u'/tmp/webkitd.err'):
-    from daemon.pidlockfile import PIDLockFile
+    from lockfile.pidlockfile import PIDLockFile
 
     pidFile = PIDLockFile(pidPath)
 

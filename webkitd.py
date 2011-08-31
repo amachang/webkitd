@@ -612,6 +612,8 @@ class WebKitPage(QWebPage):
     for k, v in settings.items():
       self.settings().setAttribute(k, v)
 
+    QNetworkProxyFactory.setUseSystemConfiguration(True)
+
     self.loadProgress.connect(self.handleLoadProgress)
     self.loadStarted.connect(self.handleLoadStarted)
     self.loadFinished.connect(self.handleLoadFinished)

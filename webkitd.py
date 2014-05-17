@@ -73,7 +73,11 @@ class WebKitServer(QTcpServer):
 
   @classmethod
   def daemon(cls, op='start', host=u'127.0.0.1', port=1982, pidPath=u'/tmp/webkitd.pid', stdout=u'/tmp/webkitd.out', stderr=u'/tmp/webkitd.err'):
-    from daemon.pidlockfile import PIDLockFile
+    try:
+      from daemon.pidlockfile import PIDLockFile
+    except:
+      from lockfile.pidlockfile import PIDLockFile
+      pass
 
     pidFile = PIDLockFile(pidPath)
 
@@ -94,16 +98,19 @@ class WebKitServer(QTcpServer):
           print u'Daemon is still started.'
           return
 
-      from daemon import DaemonContext
-
-      dc = DaemonContext(
-        pidfile=pidFile,
-        stderr=open(stderr, u'w+'),
-        stdout=open(stdout, u'w+')
-      )
-
-      with dc:
+      if sys.platform == 'win32':
         cls.start(host, port)
+      else:
+        from daemon import DaemonContext
+
+        dc = DaemonContext(
+          pidfile=pidFile,
+          stderr=open(stderr, u'w+'),
+          stdout=open(stdout, u'w+')
+        )
+
+        with dc:
+          cls.start(host, port)
 
     elif op == u'stop':
       if not pidFile.is_locked():
